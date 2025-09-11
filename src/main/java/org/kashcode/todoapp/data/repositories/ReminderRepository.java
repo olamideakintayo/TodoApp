@@ -13,5 +13,5 @@ public interface ReminderRepository extends JpaRepository<Reminder, Long> {
     List<Reminder> findByTodo(Todo todo);
 
 
-    List<Reminder> findPendingRemindersBefore(LocalDateTime dateTime);
+    List<Reminder> findByTriggeredFalseAndRemindAtBefore(LocalDateTime dateTime);
 }
