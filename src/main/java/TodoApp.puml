@@ -1,0 +1,114 @@
+@startuml
+title TodoApp - Layered Architecture with Security
+
+package "Entities" {
+  class User {
+    - id: Long
+    - username: String
+    - email: String
+    - passwordHash: String
+  }
+
+  class Todo {
+    - id: Long
+    - title: String
+    - description: String
+    - dateAdded: LocalDateTime
+    - dueDate: LocalDateTime
+    - completed: boolean
+  }
+
+  class Reminder {
+    - id: Long
+    - remindAt: LocalDateTime
+    - triggered: boolean
+    - type: ReminderType
+  }
+
+  class PushSubscription {
+    - id: String
+    - endpoint: String
+    - p256dh: String
+    - auth: String
+  }
+
+  class Role {
+    - id: Long
+    - name: RoleName
+  }
+
+  enum RoleName {
+    ADMIN
+    USER
+  }
+
+  enum ReminderType {
+    EMAIL
+    DESKTOP_ALERT
+  }
+}
+
+package "DTOs" {
+  class LoginRequest
+  class RegistrationRequest
+}
+
+package "Repositories" {
+  interface UserRepository
+  class UserRepositoryImpl
+  interface TodoRepository
+  class TodoRepositoryImpl
+}
+
+package "Services" {
+  interface UserService
+  class UserServiceImpl
+  interface TodoService
+  class TodoServiceImpl
+  interface SecurityService
+  class SecurityServiceImpl
+}
+
+package "Controllers" {
+  class AuthController
+  class TodoController
+  class AdminController
+}
+
+package "Security Layer" {
+  class JwtFilter
+  class JwtUtil
+  class SecurityConfig
+}
+
+' ====================
+' Relationships
+' ====================
+User "1" -- "many" Todo
+User "1" -- "many" PushSubscription
+User "many" -- "many" Role
+Todo "1" -- "many" Reminder
+Role --> RoleName
+
+UserRepositoryImpl ..|> UserRepository
+TodoRepositoryImpl ..|> TodoRepository
+UserServiceImpl ..|> UserService
+TodoServiceImpl ..|> TodoService
+SecurityServiceImpl ..|> SecurityService
+
+UserService ..> UserRepository
+TodoService ..> TodoRepository
+SecurityService ..> UserRepository
+
+AuthController ..> UserService
+AuthController ..> SecurityService
+TodoController ..> TodoService
+AdminController ..> UserService
+
+AuthController ..> LoginRequest
+AuthController ..> RegistrationRequest
+
+SecurityConfig ..> JwtFilter
+JwtFilter ..> JwtUtil
+
+@enduml
