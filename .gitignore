@@ -35,6 +35,5 @@ build/
 .vscode/
 
 # Spring Boot sensitive configs
-application.properties
-application.yml
+.application.properties
 .env
