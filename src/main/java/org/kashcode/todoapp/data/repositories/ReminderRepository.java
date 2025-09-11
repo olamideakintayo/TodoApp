@@ -1,0 +1,17 @@
+package org.kashcode.todoapp.data.repositories;
+
+import org.kashcode.todoapp.data.models.Reminder;
+import org.kashcode.todoapp.data.models.Todo;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+public interface ReminderRepository extends JpaRepository<Reminder, Long> {
+
+
+    List<Reminder> findByTodo(Todo todo);
+
+
+    List<Reminder> findPendingRemindersBefore(LocalDateTime dateTime);
+}
