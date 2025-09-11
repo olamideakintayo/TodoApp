@@ -1,10 +1,12 @@
+# General
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+# IDEs
+## STS
 .apt_generated
 .classpath
 .factorypath
@@ -13,13 +15,13 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
+## IntelliJ IDEA
 .idea
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
+## NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -29,5 +31,10 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+## VS Code
 .vscode/
+
+# Spring Boot sensitive configs
+application.properties
+application.yml
+.env
