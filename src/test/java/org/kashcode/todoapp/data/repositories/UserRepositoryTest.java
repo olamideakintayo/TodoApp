@@ -3,25 +3,26 @@ package org.kashcode.todoapp.data.repositories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kashcode.todoapp.data.models.User;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Arrays;
+
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+
+@SpringBootTest
+@ActiveProfiles("test")
 
 class UserRepositoryTest {
 
-    @Mock
+    @Autowired
     private UserRepository userRepository;
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    void cleanDatabase() {
+        userRepository.deleteAll();
     }
 
     @Test
@@ -31,53 +32,44 @@ class UserRepositoryTest {
         user.setEmail("olamide@example.com");
         user.setPassword("secret");
 
-        User savedUser = new User();
-        savedUser.setId(1L);
-        savedUser.setUsername(user.getUsername());
-        savedUser.setEmail(user.getEmail());
-        savedUser.setPassword(user.getPassword());
+        User saved = userRepository.save(user);
 
-        when(userRepository.save(user)).thenReturn(savedUser);
-
-        User result = userRepository.save(user);
-
-        assertThat(result.getId()).isNotNull();
-        assertThat(result.getUsername()).isEqualTo("olamide");
-
-        verify(userRepository, times(1)).save(user);
+        assertThat(saved.getId()).isNotNull();
+        assertThat(saved.getUsername()).isEqualTo("olamide");
     }
 
     @Test
     void testFindAllUsers() {
         User user1 = new User();
         user1.setUsername("olamide");
+        user1.setEmail("olamide@example.com");
+        user1.setPassword("secret");
 
         User user2 = new User();
-        user2.setUsername("divin");
+        user2.setUsername("divine");
+        user2.setEmail("divin@example.com");
+        user2.setPassword("password");
 
-        List<User> mockUsers = Arrays.asList(user1, user2);
-
-        when(userRepository.findAll()).thenReturn(mockUsers);
+        userRepository.save(user1);
+        userRepository.save(user2);
 
         List<User> users = userRepository.findAll();
 
         assertThat(users).hasSize(2);
         assertThat(users).extracting(User::getUsername)
-                .containsExactlyInAnyOrder("olamide", "divin");
-
-        verify(userRepository, times(1)).findAll();
+                .containsExactlyInAnyOrder("olamide", "divine");
     }
 
     @Test
     void testDeleteUser() {
         User user = new User();
-        user.setId(1L);
         user.setUsername("olamide");
+        user.setEmail("olamide@example.com");
+        user.setPassword("secret");
 
-        doNothing().when(userRepository).delete(user);
-
+        userRepository.save(user);
         userRepository.delete(user);
 
-        verify(userRepository, times(1)).delete(user);
+        assertThat(userRepository.findAll()).isEmpty();
     }
 }
