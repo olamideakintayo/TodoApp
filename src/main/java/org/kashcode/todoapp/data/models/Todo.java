@@ -3,6 +3,8 @@ package org.kashcode.todoapp.data.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +12,7 @@ import java.util.Set;
 @Entity
 @Data
 @Table(name = "todos")
+@EqualsAndHashCode(exclude = "reminders")
 public class Todo {
 
     @Id
