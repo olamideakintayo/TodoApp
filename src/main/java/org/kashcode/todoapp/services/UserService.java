@@ -1,6 +1,7 @@
 package org.kashcode.todoapp.services;
 
-import org.kashcode.todoapp.dto.*;
+import org.kashcode.todoapp.dtos.responses.*;
+import org.kashcode.todoapp.dtos.requests.*;
 
 import java.util.List;
 
