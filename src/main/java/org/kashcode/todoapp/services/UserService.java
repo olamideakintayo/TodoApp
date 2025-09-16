@@ -11,5 +11,5 @@ public interface UserService {
     void deleteUser(Long id);
     List<UserResponse> getAllUsers();
     UserResponse getUserById(Long id);
-    LoginResponse login(LoginRequest request);
+    UserResponse login(LoginRequest request);
 }
