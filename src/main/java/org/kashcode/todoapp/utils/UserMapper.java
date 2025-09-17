@@ -10,7 +10,7 @@ public class UserMapper {
         if (user == null) return null;
         return new UserResponse(
                 user.getId(),
-                user.getUsername(),
+                user.getUsername().trim(),
                 user.getEmail(),
                 token
         );

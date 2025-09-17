@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = new User();
-        user.setUsername(request.getUsername());
+        user.setUsername(request.getUsername().trim().toLowerCase());
         user.setEmail(request.getEmail());
         user.setPassword(PasswordUtils.encodePassword(request.getPassword()));
 
@@ -54,15 +54,24 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
 
-        if (request.getUsername() != null) user.setUsername(request.getUsername());
-        if (request.getEmail() != null) user.setEmail(request.getEmail());
-        if (request.getPassword() != null) user.setPassword(PasswordUtils.encodePassword(request.getPassword()));
+        if (request.getUsername() != null && !request.getUsername().isBlank()) {
+            user.setUsername(request.getUsername().trim());
+        }
+
+        if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            user.setEmail(request.getEmail().trim().toLowerCase());
+        }
+
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(PasswordUtils.encodePassword(request.getPassword()));
+        }
 
         User updated = userRepository.save(user);
 
         String token = jwtService.generateToken(updated.getUsername());
         return UserMapper.toResponse(updated, token);
     }
+
 
     @Override
     public void deleteUser(Long id) {
@@ -87,13 +96,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse login(LoginRequest request) {
-        User user = userRepository.findByUsername(request.getUsernameOrEmail())
-                .or(() -> userRepository.findByEmail(request.getUsernameOrEmail()))
+        User user = userRepository.findByUsername(request.getUsernameOrEmail().trim().toLowerCase())
+                .or(() -> userRepository.findByEmail(request.getUsernameOrEmail().trim().toLowerCase()))
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid username or password"));
 
         if (!PasswordUtils.verify(request.getPassword(), user.getPassword())) {
-            throw new InvalidCredentialsException("Invalid username or password");
-        }
+                throw new InvalidCredentialsException("Invalid username or password");
+            }
 
         String token = jwtService.generateToken(user.getUsername());
         return UserMapper.toResponse(user, token);
