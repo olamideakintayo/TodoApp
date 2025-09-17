@@ -5,6 +5,8 @@ import org.kashcode.todoapp.dtos.requests.TodoRequest;
 import org.kashcode.todoapp.dtos.requests.TodoUpdateRequest;
 import org.kashcode.todoapp.dtos.responses.TodoResponse;
 
+import java.time.LocalDateTime;
+
 public class TodoMapper {
 
     public static Todo toEntity(TodoRequest request) {
@@ -12,6 +14,8 @@ public class TodoMapper {
         todo.setTitle(request.getTitle());
         todo.setDescription(request.getDescription());
         todo.setCompleted(false);
+        todo.setDateAdded(LocalDateTime.now());
+        todo.setDueDate(request.getDueDate());
         return todo;
     }
 
@@ -25,6 +29,9 @@ public class TodoMapper {
         if (request.getCompleted() != null) {
             todo.setCompleted(request.getCompleted());
         }
+        if (request.getDueDate() != null) {
+            todo.setDueDate(request.getDueDate());
+        }
     }
 
     public static TodoResponse toResponse(Todo todo) {
@@ -34,6 +41,8 @@ public class TodoMapper {
         response.setDescription(todo.getDescription());
         response.setCompleted(todo.isCompleted());
         response.setUserId(todo.getUser().getId());
+        response.setDateAdded(todo.getDateAdded());
+        response.setDueDate(todo.getDueDate());
         return response;
     }
 }
