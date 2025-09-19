@@ -18,11 +18,12 @@ public class JwtServiceImpl implements JwtService {
     private final long expirationTime;
 
     public JwtServiceImpl(
-            @Value("${JWT_SECRET}") String secret,
-            @Value("${JWT_EXPIRATION}") long expirationTime) {
+            @Value("${security.jwt.secret}") String secret,
+            @Value("${security.jwt.expiration}") long expirationTime) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.expirationTime = expirationTime;
     }
+
 
     @Override
     public String generateToken(String username) {
