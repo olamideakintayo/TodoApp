@@ -20,16 +20,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@RequestBody UserRequest request) {
-        return ResponseEntity.ok(userService.register(request));
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(userService.login(request));
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable Long id,
