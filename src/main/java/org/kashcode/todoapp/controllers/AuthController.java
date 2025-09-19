@@ -2,6 +2,7 @@ package org.kashcode.todoapp.controllers;
 
 import org.kashcode.todoapp.dtos.requests.LoginRequest;
 import org.kashcode.todoapp.dtos.requests.UserRequest;
+import org.kashcode.todoapp.dtos.responses.ApiResponse;
 import org.kashcode.todoapp.dtos.responses.UserResponse;
 import org.kashcode.todoapp.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +19,15 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@RequestBody UserRequest request) {
-        return ResponseEntity.ok(userService.register(request));
+    public ResponseEntity<ApiResponse<UserResponse>> register(@RequestBody UserRequest request) {
+        UserResponse response = userService.register(request);
+        return ResponseEntity.ok(new ApiResponse<>("Registration successful", response));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(userService.login(request));
+    public ResponseEntity<ApiResponse<UserResponse>> login(@RequestBody LoginRequest request) {
+        UserResponse response = userService.login(request);
+        return ResponseEntity.ok(new ApiResponse<>("Login successful", response));
     }
 }
+
