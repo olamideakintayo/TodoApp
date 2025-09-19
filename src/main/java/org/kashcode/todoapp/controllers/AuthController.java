@@ -1,5 +1,6 @@
 package org.kashcode.todoapp.controllers;
 
+import jakarta.validation.Valid;
 import org.kashcode.todoapp.dtos.requests.LoginRequest;
 import org.kashcode.todoapp.dtos.requests.UserRequest;
 import org.kashcode.todoapp.dtos.responses.ApiResponse;
@@ -19,13 +20,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserResponse>> register(@RequestBody UserRequest request) {
+    public ResponseEntity<ApiResponse<UserResponse>> register(@Valid @RequestBody UserRequest request) {
         UserResponse response = userService.register(request);
         return ResponseEntity.ok(new ApiResponse<>("Registration successful", response));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<UserResponse>> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<ApiResponse<UserResponse>> login(@Valid @RequestBody LoginRequest request) {
         UserResponse response = userService.login(request);
         return ResponseEntity.ok(new ApiResponse<>("Login successful", response));
     }
