@@ -20,14 +20,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/users/{id}")
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable Long id,
             @RequestBody UserUpdateRequest request) {
         return ResponseEntity.ok(userService.updateUser(id, request));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/users/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
@@ -38,7 +38,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/users/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
