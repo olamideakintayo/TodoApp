@@ -7,10 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PushSubscriptionRepository extends JpaRepository<PushSubscription, Long> {
-
-
     List<PushSubscription> findByUser(User user);
-
-
-    PushSubscription findByEndpoint(String endpoint);
+    void deleteByUserAndEndpoint(User user, String endpoint);
 }
