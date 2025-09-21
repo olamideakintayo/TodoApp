@@ -29,6 +29,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, status);
     }
 
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFound(UserNotFoundException ex, HttpServletRequest request) {
         return buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
@@ -49,7 +50,6 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(ex, HttpStatus.UNAUTHORIZED, request);
     }
 
-
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> handleBadCredentials(BadCredentialsException ex, HttpServletRequest request) {
         return buildErrorResponse(ex, HttpStatus.UNAUTHORIZED, request);
@@ -58,6 +58,38 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<Object> handleUsernameNotFound(UsernameNotFoundException ex, HttpServletRequest request) {
         return buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
+    }
+
+    // 🔹 Reminder-related
+    @ExceptionHandler(ReminderNotFoundException.class)
+    public ResponseEntity<Object> handleReminderNotFound(ReminderNotFoundException ex, HttpServletRequest request) {
+        return buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(DuplicateReminderException.class)
+    public ResponseEntity<Object> handleDuplicateReminder(DuplicateReminderException ex, HttpServletRequest request) {
+        return buildErrorResponse(ex, HttpStatus.CONFLICT, request);
+    }
+
+    @ExceptionHandler(ReminderAlreadyTriggeredException.class)
+    public ResponseEntity<Object> handleReminderAlreadyTriggered(ReminderAlreadyTriggeredException ex, HttpServletRequest request) {
+        return buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
+    }
+
+    // 🔹 Push Subscription-related
+    @ExceptionHandler(PushSubscriptionNotFoundException.class)
+    public ResponseEntity<Object> handlePushSubscriptionNotFound(PushSubscriptionNotFoundException ex, HttpServletRequest request) {
+        return buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(PushNotificationFailedException.class)
+    public ResponseEntity<Object> handlePushNotificationFailed(PushNotificationFailedException ex, HttpServletRequest request) {
+        return buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
+    @ExceptionHandler(InvalidEmailException.class)
+    public ResponseEntity<Object> handleInvalidEmail(InvalidEmailException ex, HttpServletRequest request) {
+        return buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
     }
 
 
