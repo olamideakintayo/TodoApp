@@ -10,11 +10,9 @@ import java.security.GeneralSecurityException;
 public class PushServiceConfig {
 
     @Bean
-    public PushService pushService() throws GeneralSecurityException {
-        String publicKey = System.getenv("VAPID_PUBLIC_KEY");
-        String privateKey = System.getenv("VAPID_PRIVATE_KEY");
-        String subject = "mailto:admin@yourapp.com";
-
-        return new PushService(publicKey, privateKey, subject);
+    public PushService pushService(
+            @Value("${VAPID_PUBLIC_KEY}") String publicKey,
+            @Value("${VAPID_PRIVATE_KEY}") String privateKey
+    ) throws GeneralSecurityException {
+        return new PushService(publicKey, privateKey);
     }
-}
