@@ -16,3 +16,4 @@ public class PushServiceConfig {
     ) throws GeneralSecurityException {
         return new PushService(publicKey, privateKey);
     }
+}
