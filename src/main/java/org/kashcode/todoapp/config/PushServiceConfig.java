@@ -1,6 +1,7 @@
 package org.kashcode.todoapp.config;
 
 import nl.martijndwars.webpush.PushService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,8 +12,8 @@ public class PushServiceConfig {
 
     @Bean
     public PushService pushService(
-            @Value("${VAPID_PUBLIC_KEY}") String publicKey,
-            @Value("${VAPID_PRIVATE_KEY}") String privateKey
+            @Value("${vapid.public.key}") String publicKey,
+            @Value("${vapid.private.key}") String privateKey
     ) throws GeneralSecurityException {
         return new PushService(publicKey, privateKey);
     }

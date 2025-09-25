@@ -9,10 +9,7 @@ import org.kashcode.todoapp.data.repositories.PushSubscriptionRepository;
 import org.kashcode.todoapp.data.repositories.UserRepository;
 import org.kashcode.todoapp.dtos.requests.PushSubscriptionRequest;
 import org.kashcode.todoapp.dtos.responses.PushSubscriptionResponse;
-import org.kashcode.todoapp.exceptions.PushNotificationFailedException;
-import org.kashcode.todoapp.exceptions.PushSubscriptionNotFoundException;
-import org.kashcode.todoapp.exceptions.UserNotFoundException;
-import org.kashcode.todoapp.exceptions.InvalidEmailException;
+import org.kashcode.todoapp.exceptions.*;
 import org.kashcode.todoapp.utils.PushSubscriptionMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -42,7 +39,10 @@ public class PushSubscriptionServiceImpl implements PushSubscriptionService {
         this.mailSender = mailSender;
         this.pushService = pushService;
 
-        Security.addProvider(new BouncyCastleProvider());
+
+        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+            Security.addProvider(new BouncyCastleProvider());
+        }
     }
 
     @Override
