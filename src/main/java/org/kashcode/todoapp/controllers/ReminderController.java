@@ -3,9 +3,11 @@ package org.kashcode.todoapp.controllers;
 import org.kashcode.todoapp.dtos.requests.ReminderRequest;
 import org.kashcode.todoapp.dtos.responses.ReminderResponse;
 import org.kashcode.todoapp.services.ReminderService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,15 +21,21 @@ public class ReminderController {
     }
 
     @PostMapping("/{todoId}")
-    public ResponseEntity<ReminderResponse> createReminder(@PathVariable Long todoId,
-                                                           @RequestBody ReminderRequest request) {
-        return ResponseEntity.ok(reminderService.createReminder(todoId, request));
+    public ResponseEntity<ReminderResponse> createReminder(
+            @PathVariable Long todoId,
+            @Valid @RequestBody ReminderRequest request
+    ) {
+        ReminderResponse response = reminderService.createReminder(todoId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReminderResponse> updateReminder(@PathVariable Long id,
-                                                           @RequestBody ReminderRequest request) {
-        return ResponseEntity.ok(reminderService.updateReminder(id, request));
+    public ResponseEntity<ReminderResponse> updateReminder(
+            @PathVariable Long id,
+            @Valid @RequestBody ReminderRequest request
+    ) {
+        ReminderResponse response = reminderService.updateReminder(id, request);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
@@ -38,17 +46,19 @@ public class ReminderController {
 
     @GetMapping("/todo/{todoId}")
     public ResponseEntity<List<ReminderResponse>> getRemindersByTodo(@PathVariable Long todoId) {
-        return ResponseEntity.ok(reminderService.getRemindersByTodo(todoId));
+        List<ReminderResponse> responses = reminderService.getRemindersByTodo(todoId);
+        return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ReminderResponse> getReminderById(@PathVariable Long id) {
-        return ResponseEntity.ok(reminderService.getReminderById(id));
+        ReminderResponse response = reminderService.getReminderById(id);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{id}/trigger")
-    public ResponseEntity<Void> triggerReminder(@PathVariable Long id) {
-        reminderService.triggerReminder(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ReminderResponse> triggerReminder(@PathVariable Long id) {
+        ReminderResponse response = reminderService.triggerReminder(id);
+        return ResponseEntity.ok(response);
     }
 }
