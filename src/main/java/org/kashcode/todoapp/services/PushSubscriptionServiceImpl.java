@@ -93,14 +93,29 @@ public class PushSubscriptionServiceImpl implements PushSubscriptionService {
                         subscription.getAuthSecret(),
                         message.getBytes()
                 );
+
+
                 pushService.send(notification);
-            } catch (GeneralSecurityException | java.io.IOException e) {
+
+            } catch (GeneralSecurityException |
+                     java.io.IOException |
+                     org.jose4j.lang.JoseException |
+                     java.util.concurrent.ExecutionException |
+                     java.lang.InterruptedException e) {
+
+
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
+
                 throw new PushNotificationFailedException(
                         "Failed to send push notification to endpoint: " + subscription.getEndpoint(), e
                 );
             }
         }
     }
+
+
 
     @Override
     public void sendEmail(Long userId, String subject, String message) {
