@@ -5,6 +5,7 @@ import org.kashcode.todoapp.data.repositories.UserRepository;
 import org.kashcode.todoapp.dtos.requests.LoginRequest;
 import org.kashcode.todoapp.dtos.requests.UserRequest;
 import org.kashcode.todoapp.dtos.requests.UserUpdateRequest;
+import org.kashcode.todoapp.dtos.responses.LoginResponse;
 import org.kashcode.todoapp.dtos.responses.UserResponse;
 import org.kashcode.todoapp.exceptions.DuplicateUserException;
 import org.kashcode.todoapp.exceptions.InvalidCredentialsException;
@@ -95,17 +96,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         User user = userRepository.findByUsername(request.getUsernameOrEmail().trim().toLowerCase())
                 .or(() -> userRepository.findByEmail(request.getUsernameOrEmail().trim().toLowerCase()))
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid username or password"));
 
         if (!PasswordUtils.verify(request.getPassword(), user.getPassword())) {
-                throw new InvalidCredentialsException("Invalid username or password");
-            }
+            throw new InvalidCredentialsException("Invalid username or password");
+        }
 
         String token = jwtService.generateToken(user.getUsername());
-        return UserMapper.toResponse(user, token);
+
+        return new LoginResponse(
+                "Login successful",
+                token,
+                user.getId(),
+                user.getUsername(),
+                user.getEmail()
+        );
     }
+
 
 }
