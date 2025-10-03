@@ -7,6 +7,7 @@ import org.kashcode.todoapp.data.repositories.UserRepository;
 import org.kashcode.todoapp.dtos.requests.LoginRequest;
 import org.kashcode.todoapp.dtos.requests.UserRequest;
 import org.kashcode.todoapp.dtos.requests.UserUpdateRequest;
+import org.kashcode.todoapp.dtos.responses.LoginResponse;
 import org.kashcode.todoapp.dtos.responses.UserResponse;
 import org.kashcode.todoapp.exceptions.UserNotFoundException;
 import org.kashcode.todoapp.utils.PasswordUtils;
@@ -63,7 +64,7 @@ class UserServiceImplTest {
         loginRequest.setUsernameOrEmail("olamide");
         loginRequest.setPassword("1234567890");
 
-        UserResponse loggedInUser = userService.login(loginRequest);
+        LoginResponse loggedInUser = userService.login(loginRequest);
 
         assertNotNull(loggedInUser.getToken());
         assertEquals("Olamide", loggedInUser.getUsername());
@@ -76,16 +77,16 @@ class UserServiceImplTest {
         user.setEmail("olamide@gmail.com");
         user.setPassword(PasswordUtils.encodePassword("1234567890"));
         userRepository.save(user);
-        UserResponse loggedInUser = userService.login(new LoginRequest("olamide", "1234567890"));
+        LoginResponse loggedInUser = userService.login(new LoginRequest("olamide", "1234567890"));
 
         UserUpdateRequest updateUserRequest = new UserUpdateRequest();
         updateUserRequest.setUsername("Olamide2");
         updateUserRequest.setEmail("");
         updateUserRequest.setPassword("");
-        UserResponse updatedUser = userService.updateUser(loggedInUser.getId(), updateUserRequest);
+        UserResponse updatedUser = userService.updateUser(loggedInUser.getUserId(), updateUserRequest);
 
         assertEquals("Olamide2", updatedUser.getUsername());
-        assertEquals(loggedInUser.getId(), updatedUser.getId());
+        assertEquals(loggedInUser.getUserId(), updatedUser.getId());
     }
 
     @Test
