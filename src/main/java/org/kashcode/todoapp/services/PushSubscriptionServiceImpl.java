@@ -1,5 +1,6 @@
 package org.kashcode.todoapp.services;
 
+import lombok.extern.slf4j.Slf4j;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -11,6 +12,7 @@ import org.kashcode.todoapp.dtos.requests.PushSubscriptionRequest;
 import org.kashcode.todoapp.dtos.responses.PushSubscriptionResponse;
 import org.kashcode.todoapp.exceptions.*;
 import org.kashcode.todoapp.utils.PushSubscriptionMapper;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.security.Security;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class PushSubscriptionServiceImpl implements PushSubscriptionService {
 
@@ -116,7 +119,6 @@ public class PushSubscriptionServiceImpl implements PushSubscriptionService {
     }
 
 
-
     @Override
     public void sendEmail(Long userId, String subject, String message) {
         User user = userRepository.findById(userId)
@@ -131,6 +133,12 @@ public class PushSubscriptionServiceImpl implements PushSubscriptionService {
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
 
-        mailSender.send(mailMessage);
+        try {
+            mailSender.send(mailMessage);
+        } catch (MailException e) {
+
+            log.error("Failed to send email to {}: {}", user.getEmail(), e.getMessage(), e);
+            throw new PushNotificationFailedException("Failed to send email", e);
+        }
     }
 }
