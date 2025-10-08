@@ -27,7 +27,7 @@ public class ReminderScheduler {
     public void processDueReminders() {
         LocalDateTime now = LocalDateTime.now();
         List<Reminder> dueReminders = reminderRepository
-                .findByTriggeredFalseAndRemindAtBefore(now);
+                .findByTriggeredFalseAndRemindAtBefore(LocalDateTime.now());
 
         if (dueReminders.isEmpty()) return;
 
