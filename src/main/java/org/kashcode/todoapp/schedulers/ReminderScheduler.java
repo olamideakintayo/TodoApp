@@ -23,7 +23,7 @@ public class ReminderScheduler {
     }
 
 
-    @Scheduled(fixedRate = 60_000)
+    @Scheduled(fixedRateString = "${reminder.scheduler.rate}")
     public void processDueReminders() {
         LocalDateTime now = LocalDateTime.now();
         List<Reminder> dueReminders = reminderRepository
