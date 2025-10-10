@@ -17,5 +17,5 @@ public interface ReminderRepository extends JpaRepository<Reminder, Long> {
     List<Reminder> findByTriggeredFalseAndRemindAtBefore(LocalDateTime now);
 
 
-    boolean existsByTodoAndRemindAt(Todo todo, LocalDateTime remindAt);
+    boolean existsByTodoAndRemindAt(Todo todo, LocalDateTime remindAt, String type);
 }

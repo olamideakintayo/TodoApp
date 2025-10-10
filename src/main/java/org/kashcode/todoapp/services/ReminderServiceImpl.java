@@ -38,9 +38,17 @@ public class ReminderServiceImpl implements ReminderService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new TodoNotFoundException("Todo not found with id: " + todoId));
 
-        boolean exists = reminderRepository.existsByTodoAndRemindAt(todo, request.getRemindAt());
-        if (exists) {
-            throw new DuplicateReminderException("A reminder already exists for this Todo at the given time.");
+
+        List<Reminder> existingReminders = reminderRepository.findByTodo(todo);
+
+
+        boolean duplicate = existingReminders.stream()
+                .anyMatch(r ->
+                        Math.abs(java.time.Duration.between(r.getRemindAt(), request.getRemindAt()).toSeconds()) < 5
+                );
+
+        if (duplicate) {
+            throw new DuplicateReminderException("A reminder already exists for this Todo at a similar time.");
         }
 
         Reminder reminder = ReminderMapper.toEntity(request);
